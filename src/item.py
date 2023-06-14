@@ -53,6 +53,8 @@ class Item:
         """
         Инициализирует экземпляры класса Item из csv файла.
         """
+        cls.all.clear()
+
         with open(os.path.join(os.path.dirname(__file__), 'items.csv'), newline='', encoding='windows-1251') as csv_file:
             csv_reader = csv.DictReader(csv_file)
 

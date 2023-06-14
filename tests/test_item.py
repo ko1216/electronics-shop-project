@@ -27,7 +27,7 @@ def test_name(item_table):
 
 def test_instantiate_from_csv():
     Item.instantiate_from_csv()
-    assert len(Item.all) == 8
+    assert len(Item.all) == 5
 
 def test_string_to_number():
     assert Item.string_to_number('1.1') == 1

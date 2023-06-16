@@ -26,7 +26,7 @@ class Item:
         return self.name
 
     def __repr__(self):
-        return f"Item('{self.name}', {self.price}, {self.quantity})"
+        return f"{__class__.__name__}('{self.name}', {self.price}, {self.quantity})"
 
     @property
     def name(self):

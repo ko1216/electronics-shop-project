@@ -31,3 +31,9 @@ def test_instantiate_from_csv():
 
 def test_string_to_number():
     assert Item.string_to_number('1.1') == 1
+
+def test_str(item_table):
+    assert item_table.__str__() == 'стол'
+
+def test_repr(item_table):
+    assert item_table.__repr__() == "Item('стол', 51.5, 10)"

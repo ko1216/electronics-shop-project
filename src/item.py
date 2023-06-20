@@ -28,6 +28,11 @@ class Item:
     def __repr__(self):
         return f"{__class__.__name__}('{self.name}', {self.price}, {self.quantity})"
 
+    def __add__(self, other):
+        if not isinstance(other, Item):
+            raise ValueError(f'Складывать можно только объекты Item и дочерние')
+        return self.quantity + other.quantity
+
     @property
     def name(self):
         return self.__name

@@ -1,6 +1,28 @@
 import csv
 import os
 
+FILE_PATH = os.path.join(os.path.dirname(__file__), 'items.csv')
+
+
+class InstantiateCSVErrorException(Exception):
+    def __init__(self):
+        self.message = 'Файл поврежден'
+
+
+class InstantiateCSVError:
+    def __init__(self, file_content):
+        row_keys_set = set()
+
+        for row in file_content:
+            for key in row.keys():
+                row_keys_set.add(key)
+
+        if len(row_keys_set) != 3:
+            raise InstantiateCSVErrorException
+
+        if 'name' and 'price' and 'quantity' not in row_keys_set:
+            raise InstantiateCSVErrorException
+
 
 class Item:
     """
@@ -60,18 +82,32 @@ class Item:
         return self.price
 
     @classmethod
-    def instantiate_from_csv(cls):
+    def instantiate_from_csv(cls, filepath=FILE_PATH):
         """
         Инициализирует экземпляры класса Item из csv файла.
         """
         cls.all.clear()
 
-        with open(os.path.join(os.path.dirname(__file__), 'items.csv'), newline='', encoding='windows-1251') as csv_file:
-            csv_reader = csv.DictReader(csv_file)
+        try:
+            with open(filepath, 'r', newline='', encoding='windows-1251') as csv_file:
+                csv_reader = csv.DictReader(csv_file)
 
-            for row in csv_reader:
-                name, price, quantity = row['name'], row['price'], row['quantity']
-                cls(name, float(price), int(quantity))
+                try:
+                    InstantiateCSVError(csv_reader)
+
+                except InstantiateCSVErrorException as ex:
+                    print(ex.message)
+
+                else:
+                    with open(filepath, 'r', newline='', encoding='windows-1251') as csv_file:
+                        csv_reader = csv.DictReader(csv_file)
+
+                        for row in csv_reader:
+                            name, price, quantity = row['name'], row['price'], row['quantity']
+                            cls(name, float(price), int(quantity))
+
+        except FileNotFoundError:
+            raise FileNotFoundError('Отсутствует файл item.csv')
 
     @staticmethod
     def string_to_number(string):
